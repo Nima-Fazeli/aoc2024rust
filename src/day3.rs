@@ -2,21 +2,18 @@
 use std::fs;
 
 fn read_and_mul(path: &str) -> i32 {
-    // let mul_arr: String = fs::read_to_string(&path)
-    //     .expect("Should have been able to read the file");
+    // change this flag to see the verbose output
     let with_verbose = false;
 
     let file_content: String = fs::read_to_string(&path)
         .expect("Could not read the file");
     let mul_arr : Vec<&str> = file_content.split("").collect();
-    // let mul_arr: Vec<&str> = v.iter().map(|s| &**s).collect();
 
     let mut total = 0;
-    // let mul_str = vec!["mul("];
     let mul_str : Vec<&str> = vec!["m", "u", "l", "("];
     let mul_break : Vec<&str> = vec![","];
     let mul_end : Vec<&str> = vec![")"];
-    let number_map = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let number_map : Vec<&str> = vec!["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
     if with_verbose {
         println!("mul break is {}", mul_break[0]);
@@ -49,26 +46,17 @@ fn read_and_mul(path: &str) -> i32 {
                 if with_verbose {
                     println!("count is {} and the value is {}", count, mul_arr[count]);
                 }
-                // the trouble is when parse::<i32>() is called on a comma or a closing parenthesis it panics
-                // we need to check if the value is a number before we parse it
-                match mul_arr[count].parse::<i32>() {
-                    Ok(_) => is_number = true,
-                    Err(_) => is_number = false,
-                }
+
+                is_number = number_map.contains(&mul_arr[count]);
 
                 if is_number == true {
-                    if with_verbose {
-                        println!("is {} in the hashmap? {}", mul_arr[count], number_map.contains(&mul_arr[count].parse::<i32>().unwrap()));
+                    if is_left == true {
+                        left = left * 10 + mul_arr[count].parse::<i32>().unwrap();
+                    } else {
+                        right = right * 10 + mul_arr[count].parse::<i32>().unwrap();
                     }
-                    if number_map.contains(&mul_arr[count].parse::<i32>().unwrap()) {
-                        if is_left == true {
-                            left = left * 10 + mul_arr[count].parse::<i32>().unwrap();
-                        } else {
-                            right = right * 10 + mul_arr[count].parse::<i32>().unwrap();
-                        }
-                        if with_verbose {
-                            println!("current left and right are {} {}", left, right);
-                        }
+                    if with_verbose {
+                        println!("current left and right are {} {}", left, right);
                     }
                 } else if mul_arr[count] == mul_break[0] {
                     if with_verbose {
@@ -93,7 +81,7 @@ fn read_and_mul(path: &str) -> i32 {
             }
         }
     }
-    return total
+    return total;
 }
 
 fn main() {
