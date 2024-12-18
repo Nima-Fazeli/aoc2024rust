@@ -1,6 +1,5 @@
 // day 5 challenge
 use std::fs;
-use std::collections::HashMap;
 
 fn create_hash(path: &str) -> (Vec<Vec<String>>, Vec<String>) {
     let file_content: String = fs::read_to_string(&path)
